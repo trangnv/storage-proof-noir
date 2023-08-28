@@ -9,7 +9,7 @@
 
 ## Example contract and its storage layout
 
-### Contract storage
+### Contract storage layout
 
 ```bash
 $ cd hodor
@@ -26,7 +26,7 @@ $ forge inspect src/Hodor.sol:Hodor storage --pretty
 | _tokenIdCounter    | struct Counters.Counter                      | 7    | 0      | 32    | src/Hodor.sol:Hodor |
 ```
 
-### Read contract storage
+### Read contract storage, on Goerli
 
 ```bash
 $ forge create Hodor --private-key $PRIVATE_KEY --verify --rpc-url $RPC_URL
