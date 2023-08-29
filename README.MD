@@ -40,7 +40,7 @@ Transaction hash: 0x41e695fe252a76ea0b215da3379da7066630f99f2dc4b554a41d96565d01
 $ cast index uint256 0 2
 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b
 # Compute the storage slot for an entry in a mapping $ cast index key_type key slot
-# We are looking at slot number 2, key_type is uint256 and key is 0
+# We are looking at slot number 2 - _owners, key_type is uint256 and key is 0
 ```
 
 ```bash
@@ -51,4 +51,18 @@ $ cast proof 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507d
 
 ## circuits
 
+Circuit to prove: The value in the storage slot belong to the storage root
+
+The depth of the storage trie depends on the number of owners (for this particular [Hodor NFT contract](https://goerli.etherscan.io/address/0xbefa2a0e4d815c6dcd8b93bf1668a422c1397c8a)), so 2 seperated circuits were created:
+
+- `depth2`: circuit for depth 2 storage trie, 1 test should pass and 1 test should fail, the fail one is for the case when NFT is not minted yet (`eth_getProof` at a particular block)
+
+- `depth3`: the only test should pass as input are from latest block (\_owner[1] has value other than 0x0)
+
+- The values in test are processed with `eth_getProof` returned values, utils are in `ts/utils/storageProofPreprocessing`
+
 ## ts - testing noir circuits and Ethereum API endpoints utils
+
+- Utility to get data from Alchemy API and process it to be used as input for Noir circuits
+
+- Testing Noir circuits with TypeScript _(in progress)_
