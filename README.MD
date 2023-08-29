@@ -4,7 +4,8 @@
 .
 ├── README.MD
 ├── circuits
-└── hodor # example NFT contract
+├── hodor # example NFT contract
+└── ts # testing noir circuits and Ethereum API endpoints utils
 ```
 
 ## Example contract and its storage layout
@@ -45,5 +46,9 @@ $ cast index uint256 0 2
 ```bash
 $ cast storage 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b --rpc-url $RPC_URL
 0x00000000000000000000000077fcf983241ceb7e8c928102f6fe63a1de834c5d
-cast proof 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b --rpc-url $RPC_URL
+$ cast proof 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b --rpc-url $RPC_URL
 ```
+
+## circuits
+
+## ts - testing noir circuits and Ethereum API endpoints utils

@@ -14,3 +14,6 @@ docs/
 .env
 lib
 .DS_Store
+node_modules
+crs
+target

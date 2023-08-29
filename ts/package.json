@@ -1,0 +1,28 @@
+{
+  "name": "snippets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node ./dist/ts/index.js",
+    "test": "vitest --test-timeout=100000"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aztec/bb.js": "^0.3.4",
+    "@iarna/toml": "^2.2.5",
+    "@noir-lang/acvm_js": "github:noir-lang/acvm-simulator-wasm#c56eec56f67f90fef90126c5575b85190bdcd1e1",
+    "alchemy-sdk": "^2.9.2",
+    "dotenv": "^16.3.1",
+    "ethers": "^5.7.2",
+    "fflate": "^0.8.0",
+    "rlp": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.3"
+  }
+}

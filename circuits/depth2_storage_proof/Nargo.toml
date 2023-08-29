@@ -1,5 +1,7 @@
 [package]
 authors = [""]
+name = "depth2_storage_trie"
+type = "bin"
 compiler_version = "0.9.0"
 
 [dependencies]
