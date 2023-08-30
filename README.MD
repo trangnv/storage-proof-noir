@@ -66,3 +66,7 @@ The depth of the storage trie depends on the number of owners (for this particul
 - Utility to get data from Alchemy API and process it to be used as input for Noir circuits
 
 - Testing Noir circuits with TypeScript _(in progress)_
+
+# References
+- [noir-storage-proofs-demo](https://github.com/Maddiaa0/noir-storage-proofs-demo)
+- [noir-trie-proofs](https://github.com/aragonzkresearch/noir-trie-proofs)
