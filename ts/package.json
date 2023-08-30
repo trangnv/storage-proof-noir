@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "tsc && node ./dist/ts/index.js",
-    "test": "vitest --test-timeout=100000"
+    "test": "vitest --test-timeout=100000",
+    "generate-inputs": "ts-node --esm --experimental-specifier-resolution=node ./utils/populateInput.ts"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +19,8 @@
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",
     "fflate": "^0.8.0",
-    "rlp": "^3.0.0"
+    "rlp": "^3.0.0",
+    "blake2": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.5",

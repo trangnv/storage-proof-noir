@@ -1,4 +1,214 @@
-proof = [
+use dep::ecrecover;
+use dep::std;
+use dep::proof;
+// use bigint::BigUint56;
+// mod bigint;
+mod utils;
+
+global DEPTH: Field = 3;
+global PROOF_LEN: Field = 1596;
+
+fn main(
+    pub_key: [u8; 64],
+    signature: [u8; 64],
+    hashed_message: pub [u8; 32],
+//   nullifier: pub [u8; 32],
+    proof: [u8; PROOF_LEN], 
+    key: [u8;32], // key to the storage slot
+    storage: [u8; 32], 
+    // The value in the storage slot
+    value: pub [u8; 32]
+
+) {
+    // prove to be owner: get address from signature, calculate storage_slot correspond to that address, 
+    // assert == to storage_lot_key from storage proof
+    let address_key = ecrecover::secp256k1::PubKey::from_unified(pub_key);
+    let address = address_key.ecrecover(signature, hashed_message);
+    let storage_slot = utils::get_storage_slot(address, 0);
+    assert(storage_slot == key);
+
+    //
+    let depth = DEPTH;
+    let trie_proof = proof::TrieProof {
+        key,
+        proof,
+        depth,
+        value
+    };
+    assert(trie_proof.verify_storage_root(storage));
+    // std::println(value);
+    // tried to compare value to e.g. 1 mil using BigInt but it didn't work
+}
+
+#[test]
+fn test_get_address(){
+let pub_key = [
+  157,
+  67,
+  242,
+  100,
+  21,
+  112,
+  205,
+  66,
+  92,
+  126,
+  22,
+  43,
+  72,
+  179,
+  142,
+  213,
+  47,
+  54,
+  165,
+  7,
+  136,
+  27,
+  160,
+  156,
+  144,
+  176,
+  205,
+  55,
+  126,
+  146,
+  91,
+  199,
+  200,
+  252,
+  162,
+  243,
+  143,
+  233,
+  183,
+  107,
+  135,
+  59,
+  37,
+  49,
+  235,
+  83,
+  126,
+  205,
+  146,
+  32,
+  252,
+  26,
+  210,
+  231,
+  191,
+  117,
+  182,
+  232,
+  218,
+  101,
+  193,
+  177,
+  126,
+  82
+];
+let signature = [
+  48,
+  172,
+  199,
+  87,
+  74,
+  55,
+  187,
+  84,
+  206,
+  8,
+  135,
+  206,
+  58,
+  59,
+  128,
+  103,
+  126,
+  216,
+  224,
+  187,
+  12,
+  51,
+  36,
+  95,
+  130,
+  172,
+  0,
+  194,
+  174,
+  108,
+  12,
+  250,
+  57,
+  180,
+  34,
+  111,
+  74,
+  18,
+  204,
+  245,
+  208,
+  160,
+  2,
+  19,
+  213,
+  231,
+  222,
+  213,
+  77,
+  38,
+  230,
+  137,
+  8,
+  253,
+  163,
+  225,
+  137,
+  52,
+  221,
+  243,
+  218,
+  140,
+  200,
+  101
+];
+let hashed_message = [
+  41,
+  216,
+  232,
+  128,
+  241,
+  152,
+  172,
+  218,
+  105,
+  161,
+  205,
+  130,
+  221,
+  44,
+  142,
+  55,
+  237,
+  198,
+  187,
+  126,
+  132,
+  218,
+  38,
+  82,
+  127,
+  184,
+  160,
+  207,
+  125,
+  72,
+  44,
+  218
+];
+let proof = [
   248,
   145,
   160,
@@ -1595,8 +1805,8 @@ proof = [
   0,
   0,
   0
-]
-key = [
+];
+let storage_slot_key = [
   25,
   143,
   174,
@@ -1629,8 +1839,8 @@ key = [
   42,
   13,
   174
-]
-storage = [
+];
+let storage = [
   57,
   164,
   253,
@@ -1663,8 +1873,8 @@ storage = [
   185,
   190,
   61
-]
-value = [
+];
+let value = [
   0,
   0,
   0,
@@ -1697,4 +1907,8 @@ value = [
   128,
   0,
   0
-]
+];
+
+main(pub_key, signature, hashed_message, proof, storage_slot_key, storage, value);
+}
+

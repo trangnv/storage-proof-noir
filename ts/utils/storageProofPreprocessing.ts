@@ -1,5 +1,4 @@
-const dotenv = require("dotenv");
-dotenv.config();
+import "dotenv/config";
 import { Network, Alchemy } from "alchemy-sdk";
 import TOML from "@iarna/toml";
 import fs from "fs";
@@ -31,7 +30,7 @@ export async function preprocessing(
   // Optional config object, but defaults to demo api-key and eth-mainnet.
   const settings = {
     apiKey: ALCHEMY_API_KEY,
-    network: Network.ETH_GOERLI,
+    network: Network.ETH_SEPOLIA,
   };
   const alchemy = new Alchemy(settings);
 
@@ -67,13 +66,7 @@ export async function preprocessing(
     value,
   };
 
-  const proofAsToml = TOML.stringify(proofData);
-  fs.writeFileSync("Prover.toml", proofAsToml);
-
-  // this is input to update circuits
-  console.log("proof length: ", proof.length);
-  console.log("trie depth: ", theProof.proof.length);
-
-  console.log("value:", theProof.value);
+  // const proofAsToml = TOML.stringify(proofData);
+  // fs.writeFileSync("Prover.toml", proofAsToml);
   return proofData;
 }

@@ -4,49 +4,49 @@
 .
 ├── README.MD
 ├── circuits
-├── hodor # example NFT contract
+├── docs
+├── erc20-token # example NFT contract
+├── hodor
 └── ts # testing noir circuits and Ethereum API endpoints utils
 ```
 
-## Example contract and its storage layout
+## Contracts and storage layout
 
-### Contract storage layout
+### ERC20Contract storage layout
 
 ```bash
-$ cd hodor
-$ forge inspect src/Hodor.sol:Hodor storage --pretty
-| Name               | Type                                         | Slot | Offset | Bytes | Contract            |
-|--------------------|----------------------------------------------|------|--------|-------|---------------------|
-| _name              | string                                       | 0    | 0      | 32    | src/Hodor.sol:Hodor |
-| _symbol            | string                                       | 1    | 0      | 32    | src/Hodor.sol:Hodor |
-| _owners            | mapping(uint256 => address)                  | 2    | 0      | 32    | src/Hodor.sol:Hodor |
-| _balances          | mapping(address => uint256)                  | 3    | 0      | 32    | src/Hodor.sol:Hodor |
-| _tokenApprovals    | mapping(uint256 => address)                  | 4    | 0      | 32    | src/Hodor.sol:Hodor |
-| _operatorApprovals | mapping(address => mapping(address => bool)) | 5    | 0      | 32    | src/Hodor.sol:Hodor |
-| _owner             | address                                      | 6    | 0      | 20    | src/Hodor.sol:Hodor |
-| _tokenIdCounter    | struct Counters.Counter                      | 7    | 0      | 32    | src/Hodor.sol:Hodor |
+$ cd erc20-token
+forge inspect src/Noir.sol:Noir storage --pretty
+| Name         | Type                                            | Slot | Offset | Bytes | Contract          |
+|--------------|-------------------------------------------------|------|--------|-------|-------------------|
+| _balances    | mapping(address => uint256)                     | 0    | 0      | 32    | src/Noir.sol:Noir |
+| _allowances  | mapping(address => mapping(address => uint256)) | 1    | 0      | 32    | src/Noir.sol:Noir |
+| _totalSupply | uint256                                         | 2    | 0      | 32    | src/Noir.sol:Noir |
+| _name        | string                                          | 3    | 0      | 32    | src/Noir.sol:Noir |
+| _symbol      | string                                          | 4    | 0      | 32    | src/Noir.sol:Noir |
+| _owner       | address                                         | 5    | 0      | 20    | src/Noir.sol:Noir |
 ```
 
-### Read contract storage, on Goerli
+### Read contract storage, on Sepolia
 
 ```bash
-$ forge create Hodor --private-key $PRIVATE_KEY --verify --rpc-url $RPC_URL
+$ forge create Noir --private-key $PRIVATE_KEY --verify --rpc-url $SEPOLIA_RPC_URL
 Deployer: 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D
 Deployed to: 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A
 Transaction hash: 0x41e695fe252a76ea0b215da3379da7066630f99f2dc4b554a41d96565d012a9c
 ```
 
 ```bash
-$ cast index uint256 0 2
-0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b
+erc20-token git:(erc20) ✗ cast index address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D 0
+0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae
 # Compute the storage slot for an entry in a mapping $ cast index key_type key slot
-# We are looking at slot number 2 - _owners, key_type is uint256 and key is 0
+# We are looking at slot number 0 - _balances, key_type is address and key is the address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D
 ```
 
 ```bash
-$ cast storage 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b --rpc-url $RPC_URL
-0x00000000000000000000000077fcf983241ceb7e8c928102f6fe63a1de834c5d
-$ cast proof 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A 0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b --rpc-url $RPC_URL
+cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
+0x00000000000000000000000000000000000000000000e8ef1e96ae3897800000 # 1_100_000 e18
+$ cast proof 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
 ```
 
 ## circuits
@@ -66,19 +66,3 @@ The depth of the storage trie depends on the number of owners (for this particul
 - Utility to get data from Alchemy API and process it to be used as input for Noir circuits
 
 - Testing Noir circuits with TypeScript _(in progress)_
-
-```rust
-fn test_main_fail() {
-/* INPUTS:
-  Contract address: "0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A",
-  ["0xe90b7bceb6e7df5418fb78d8ee546e97c83a08bbccc01a0644d599ccd2a7c2e0"], // owner of Hodor #1 is stored at this slot
-  "0x60263ae988a27f28d44c96e292b8a0d6cbdc9473f0ed70f46f77550bbf6271eb" // block 9590306 which Hodors #1 WEREN'T minted
-*/
-
-fn test_main_pass(){
-/* INPUTS:
-  Contract address: "0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A",
-  ["0xac33ff75c19e70fe83507db0d683fd3465c996598dc972688b7ace676c89077b"], // owner of Hodor #0 is stored at this slot
-  "0x60263ae988a27f28d44c96e292b8a0d6cbdc9473f0ed70f46f77550bbf6271eb" // block 9590306 which Hodors #0 WERE minted
-*/
-```
