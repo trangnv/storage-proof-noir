@@ -1,9 +1,0 @@
-[package]
-authors = [""]
-name = "depth3_storage_trie"
-type = "bin"
-compiler_version = "0.10.0"
-
-[dependencies]
-# storage_trie = { path = "../.." }
-proof = { tag = "main", git = "https://github.com/aragonzkresearch/noir-trie-proofs" }
