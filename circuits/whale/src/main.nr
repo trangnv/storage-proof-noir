@@ -37,6 +37,8 @@ fn main(
     };
     assert(trie_proof.verify_storage_root(storage));
     // std::println(value);
+
+    // TODO: assert value is more than 1 mil
     // tried to compare value to e.g. 1 mil using BigInt but it didn't work
 }
 

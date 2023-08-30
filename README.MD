@@ -49,17 +49,21 @@ cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67
 $ cast proof 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
 ```
 
-## circuits
+## Circuits
 
-Circuit to prove: The value in the storage slot belong to the storage root
+## What to prove:
 
-The depth of the storage trie depends on the number of owners (for this particular [Hodor NFT contract](https://goerli.etherscan.io/address/0xbefa2a0e4d815c6dcd8b93bf1668a422c1397c8a)), so 2 seperated circuits were created:
+- I am the owner of an address
+- That address has more than 1_000_000 [NOIR](https://sepolia.etherscan.io/address/0x0041ff33e47eae38ab8b9a1c2070e279d5aaf211) ERC20 tokens so I am NOIR whale
+- And I'm not revealing my address
 
-- `depth2`: circuit for depth 2 storage trie, 1 test should pass and 1 test should fail, the fail one is for the case when NFT is not minted yet (`eth_getProof` at a particular block)
+## How?
 
-- `depth3`: the only test should pass as input are from latest block (\_owner[1] has value other than 0x0)
-
-- The values in test are processed with `eth_getProof` returned values, utils are in `ts/utils/storageProofPreprocessing`
+- Sign a message with my private key
+- Use [ecrecover](https://github.com/colinnielsen/ecrecover-noir) to get my address in the circuit
+- Calculate the key slot corresponding to the address and the \_balances mapping
+- Use [noir-trie-proofs](https://github.com/aragonzkresearch/noir-trie-proofs) to prove the storage value belongs to the storage root
+- Compare the value with 1_000_000
 
 ## ts - testing noir circuits and Ethereum API endpoints utils
 
