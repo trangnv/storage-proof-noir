@@ -1,5 +1,9 @@
 # Storage Proof with Noir
 
+Prove that you own an address that has more than 1_000_000 [NOIR](https://sepolia.etherscan.io/address/0x0041ff33e47eae38ab8b9a1c2070e279d5aaf211) ERC20 tokens without revealing the address.
+
+[erc721 branch](https://github.com/trangnv/storage-proof-noir/tree/erc721) has the same goal but with an ERC721 token.
+
 ```bash
 .
 ├── README.MD
@@ -32,19 +36,18 @@ forge inspect src/Noir.sol:Noir storage --pretty
 ```bash
 $ forge create Noir --private-key $PRIVATE_KEY --verify --rpc-url $SEPOLIA_RPC_URL
 Deployer: 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D
-Deployed to: 0xbeFA2A0E4D815C6dcd8b93bf1668A422c1397C8A
-Transaction hash: 0x41e695fe252a76ea0b215da3379da7066630f99f2dc4b554a41d96565d012a9c
+Deployed to: 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211
 ```
 
 ```bash
-erc20-token git:(erc20) ✗ cast index address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D 0
+$ cast index address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D 0
 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae
 # Compute the storage slot for an entry in a mapping $ cast index key_type key slot
 # We are looking at slot number 0 - _balances, key_type is address and key is the address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D
 ```
 
 ```bash
-cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
+$ cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
 0x00000000000000000000000000000000000000000000e8ef1e96ae3897800000 # 1_100_000 e18
 $ cast proof 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae --rpc-url $SEPOLIA_RPC_URL
 ```
@@ -67,6 +70,11 @@ $ cast proof 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67
 
 ## ts - testing noir circuits and Ethereum API endpoints utils
 
-- Utility to get data from Alchemy API and process it to be used as input for Noir circuits
+- Utility to sign message with private key, get data from Alchemy API and process it to be used as input for Noir circuits
 
 - Testing Noir circuits with TypeScript _(in progress)_
+
+# References
+
+- [noir-storage-proofs-demo](https://github.com/Maddiaa0/noir-storage-proofs-demo)
+- [noir-trie-proofs](https://github.com/aragonzkresearch/noir-trie-proofs)
