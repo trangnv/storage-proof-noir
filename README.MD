@@ -74,6 +74,8 @@ $ cast proof 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f67
 
 - Testing Noir circuits with TypeScript _(in progress)_
 
+- Proving on browser
+
 # References
 
 - [noir-storage-proofs-demo](https://github.com/Maddiaa0/noir-storage-proofs-demo)
