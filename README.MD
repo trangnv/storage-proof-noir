@@ -31,13 +31,7 @@ forge inspect src/Noir.sol:Noir storage --pretty
 | _owner       | address                                         | 5    | 0      | 20    | src/Noir.sol:Noir |
 ```
 
-### Read contract storage, on Sepolia
-
-```bash
-$ forge create Noir --private-key $PRIVATE_KEY --verify --rpc-url $SEPOLIA_RPC_URL
-Deployer: 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D
-Deployed to: 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211
-```
+### Read [contract](https://sepolia.etherscan.io/address/0x0041ff33e47eae38ab8b9a1c2070e279d5aaf211) storage, on Sepolia
 
 ```bash
 $ cast index address 0x77fCF983241ceb7e8c928102f6fe63A1de834c5D 0
