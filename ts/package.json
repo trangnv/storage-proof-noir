@@ -6,15 +6,15 @@
   "type": "module",
   "scripts": {
     "start": "tsc && node ./dist/ts/index.js",
-    "test": "vitest --test-timeout=100000",
+    "test": "vitest",
     "generate-inputs": "ts-node --esm --experimental-specifier-resolution=node ./utils/populateInput.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aztec/bb.js": "^0.3.4",
+    "@aztec/bb.js": "0.4.6",
+    "@noir-lang/acvm_js": "github:noir-lang/acvm-simulator-wasm",
     "@iarna/toml": "^2.2.5",
-    "@noir-lang/acvm_js": "github:noir-lang/acvm-simulator-wasm#c56eec56f67f90fef90126c5575b85190bdcd1e1",
     "alchemy-sdk": "^2.9.2",
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",

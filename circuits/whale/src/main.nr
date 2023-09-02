@@ -1,8 +1,6 @@
 use dep::ecrecover;
 use dep::std;
 use dep::proof;
-// use bigint::BigUint56;
-// mod bigint;
 mod utils;
 
 global DEPTH: Field = 3;
@@ -11,15 +9,12 @@ global PROOF_LEN: Field = 1596;
 fn main(
     pub_key: [u8; 64],
     signature: [u8; 64],
-    hashed_message: pub [u8; 32],
-//   nullifier: pub [u8; 32],
+    hashed_message: [u8; 32],
     proof: [u8; PROOF_LEN], 
     key: [u8;32], // key to the storage slot
     storage: [u8; 32], 
-    // The value in the storage slot
-    value: pub [u8; 32]
-
-) {
+    value: [u8; 32],  // The value in the storage slot
+) -> pub Field {
     // prove to be owner: get address from signature, calculate storage_slot correspond to that address, 
     // assert == to storage_lot_key from storage proof
     let address_key = ecrecover::secp256k1::PubKey::from_unified(pub_key);
@@ -27,7 +22,7 @@ fn main(
     let storage_slot = utils::get_storage_slot(address, 0);
     assert(storage_slot == key);
 
-    //
+    // verify storage proof
     let depth = DEPTH;
     let trie_proof = proof::TrieProof {
         key,
@@ -36,10 +31,16 @@ fn main(
         value
     };
     assert(trie_proof.verify_storage_root(storage));
-    // std::println(value);
 
-    // TODO: assert value is more than 1 mil
     // tried to compare value to e.g. 1 mil using BigInt but it didn't work
+    let value_field = utils::arr32_to_field(value);
+    let ether = 1000000000000000000;
+    let value_u64 = (value_field / ether) as u64;
+    assert(value_u64 > 1000000);
+
+    let pub_key_field = utils::arr64_to_field(pub_key);
+
+    dep::std::hash::pedersen([pub_key_field])[0]
 }
 
 #[test]
@@ -1912,5 +1913,6 @@ let value = [
 ];
 
 main(pub_key, signature, hashed_message, proof, storage_slot_key, storage, value);
+
 }
 

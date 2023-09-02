@@ -9,10 +9,20 @@ import { preprocessing } from "./storageProofPreprocessing.js";
 // @ts-ignore -- no types
 // import blake2 from "blake2";
 
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
+type Serial = {
+  pub_key: number[];
+  signature: number[];
+  hashed_message: number[];
+  proof: number[];
+  key: number[];
+  storage: number[];
+  value: number[];
+};
+
+// const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const PRIVATE_KEY: string = process.env.PRIVATE_KEY!;
 
-export async function main() {
+export async function generate(): Promise<Serial> {
   const user = new ethers.Wallet(PRIVATE_KEY);
   console.log("user address: ", user.address);
 
@@ -34,6 +44,7 @@ export async function main() {
   let hashed_message = Array.from(
     ethers.utils.arrayify(hashedMessage).values()
   );
+  console.log("hashedMessage: ", hashedMessage);
 
   // const nullifierBuff = blake2
   //   .createHash("blake2s")
@@ -44,16 +55,16 @@ export async function main() {
 
   const storage_proof = await preprocessing(
     "0x0041ff33e47eae38ab8b9a1c2070e279d5aaf211",
-    ["0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae"], // owner of Hodor #1
-    "latest" // block 9590306 which Hodors #1 were NOT minted
+    ["0x198faee1dd5108d4ea2f67cf2ffd891b1e4e7cfe8a157beebd36983e882a0dae"],
+    "latest"
   );
 
-  let data = {
+  let data: Serial = {
     pub_key: pubKey,
     signature: signature,
     hashed_message: hashed_message,
     proof: storage_proof.proof,
-    storage_slot_key: storage_proof.key,
+    key: storage_proof.key,
     storage: storage_proof.storage,
     value: storage_proof.value,
     // nullifier,
@@ -61,6 +72,7 @@ export async function main() {
 
   const dir = dirname(fileURLToPath(import.meta.url));
   let path = resolve(dir + "../../../circuits/whale/Prover.toml");
+  return data;
 
   writeToToml(data, path);
 }
@@ -76,6 +88,7 @@ export async function getStorageSlot() {
   const paddedSlot = ethers.utils.hexZeroPad(slot, 32);
   const concatenated = ethers.utils.concat([paddedAddress, paddedSlot]);
   const hash = ethers.utils.keccak256(concatenated);
+  console.log("storage slot:", hash);
 
   // const result = await provider.getStorageAt(
   //   "0xC216FdC8fb87A151d69313e18a80a58bebBA7267",
@@ -84,5 +97,5 @@ export async function getStorageSlot() {
   // console.log("result ethers:", parseInt(result, 16));
 }
 
-main();
 // getStorageSlot();
+generate();

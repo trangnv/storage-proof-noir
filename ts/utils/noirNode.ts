@@ -9,7 +9,7 @@ import {
 } from "@aztec/bb.js/dest/node/index.js";
 import { executeCircuit, compressWitness } from "@noir-lang/acvm_js";
 import { ethers } from "ethers"; // I'm lazy so I'm using ethers to pad my input
-import circuit from "../../circuits/depth3_storage_proof/target/depth3_storage_trie.json";
+import circuit from "../../circuits/whale/target/sp.json";
 import { Ptr } from "@aztec/bb.js/dest/node/types";
 
 export class NoirNode {
@@ -29,13 +29,19 @@ export class NoirNode {
     this.acirBufferUncompressed = decompressSync(this.acirBuffer);
 
     this.api = await newBarretenbergApiAsync(4);
+    console.log("1111111111111");
 
     const [exact, total, subgroup] = await this.api.acirGetCircuitSizes(
       this.acirBufferUncompressed
     );
+    console.log("22222222222222222");
+    console.log("total", total);
     const subgroupSize = Math.pow(2, Math.ceil(Math.log2(total)));
     const crs = await Crs.new(subgroupSize + 1);
+    console.log("subgroupSize", subgroupSize);
+    console.log("crs", crs);
     await this.api.commonInitSlabAllocator(subgroupSize);
+    console.log("3333333333333");
     await this.api.srsInitSrs(
       new RawBuffer(crs.getG1Data()),
       crs.numPoints,
@@ -47,27 +53,49 @@ export class NoirNode {
 
   async generateWitness(input: any, acirBuffer: Buffer): Promise<Uint8Array> {
     const initialWitness = new Map<number, string>();
+
     initialWitness.set(
       1,
-      // ethers.utils.hexZeroPad(`${input.proof.toString(16)}`, 32)
+      ethers.utils.hexZeroPad(`${input.proof.toString(16)}`, 32)
       // ethers.utils.hexZeroPad(`0x${input.x.toString(16)}`, 32)
-      input.proof
+      // input.pub_key
     );
-    initialWitness.set(
-      2,
-      // ethers.utils.hexZeroPad(`${input.key.toString(16)}`, 32)
-      input.key
-    );
-    initialWitness.set(
-      3,
-      // ethers.utils.hexZeroPad(`${input.storage.toString(16)}`, 32)
-      input.storage
-    );
-    initialWitness.set(
-      4,
-      // ethers.utils.hexZeroPad(`${input.value.toString(16)}`, 32)
-      input.value
-    );
+    // initialWitness.set(
+    //   1,
+    //   // ethers.utils.hexZeroPad(`${input.proof.toString(16)}`, 32)
+    //   // ethers.utils.hexZeroPad(`0x${input.x.toString(16)}`, 32)
+    //   input.pub_key
+    // );
+    // initialWitness.set(
+    //   2,
+    //   // ethers.utils.hexZeroPad(`${input.key.toString(16)}`, 32)
+    //   input.signature
+    // );
+    // initialWitness.set(
+    //   3,
+    //   // ethers.utils.hexZeroPad(`${input.storage.toString(16)}`, 32)
+    //   input.hashed_message
+    // );
+    // initialWitness.set(
+    //   4,
+    //   // ethers.utils.hexZeroPad(`${input.value.toString(16)}`, 32)
+    //   input.proof
+    // );
+    // initialWitness.set(
+    //   5,
+    //   // ethers.utils.hexZeroPad(`${input.value.toString(16)}`, 32)
+    //   input.key
+    // );
+    // initialWitness.set(
+    //   6,
+    //   // ethers.utils.hexZeroPad(`${input.value.toString(16)}`, 32)
+    //   input.storage
+    // );
+    // initialWitness.set(
+    //   7,
+    //   // ethers.utils.hexZeroPad(`${input.value.toString(16)}`, 32)
+    //   input.value
+    // );
 
     const witnessMap = await executeCircuit(
       this.acirBuffer,
