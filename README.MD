@@ -9,16 +9,24 @@ User can prove that he owns an address which has more than 1_000_000 [NOIR](http
 - run the Noir circuit to generate the proof
 - send the proof to the verifier contract using a anonymous account
 
-- Current status:
+## Current status:
 
-  - [x] Signing message with private key, get data from Alchemy API and process it to be used as input for Noir circuits: `ts/utils/populateInput.ts`
+- [x] Signing message with private key, get data from Alchemy API and process it to be used as input for Noir circuits: `ts/utils/populateInput.ts`
 
-  - [x] Generate proof with Noir circuits: `circuits/whale` using Nargo CLI
+- [x] Generate proof with Noir circuits: `circuits/whale` using Nargo CLI
 
-  - [ ] Generating proof with TypeScript / on browser: <br>
-        Currently, the circuit here exceeds the limit that [bb.js](https://www.npmjs.com/package/@aztec/bb.js) can handle, recursion is planned to be implemented that will enable us to generate the proof with TypeScript and run it on browser
-  - [x] Verifier contract: `verifier-contract/src/WhaleVerifier.sol` <br>
-        Tested with Foundry with input / proof generated from Nargo CLI
+- [x] Verifier contract: `verifier-contract/src/WhaleVerifier.sol` <br>
+      Tested with Foundry with input / proof generated from Nargo CLI
+
+- [ ] Testing circuit, generating proof with TypeScript / on browser: <br>
+      Currently, the circuit here exceeds the limit that [bb.js](https://www.npmjs.com/package/@aztec/bb.js) can handle, recursion is planned to be implemented that will enable us to generate the proof with TypeScript and run it on browser
+
+- [ ] Enforcing user to get `eth_getProof` data from a defined contract address
+
+  - [ ] Using a web app that with defined contract address
+  - [ ] Include the contract address / codehash in the proof
+
+- [ ] Better double spending prevention mechanism
 
 ## Repo structure
 
@@ -47,6 +55,8 @@ User can prove that he owns an address which has more than 1_000_000 [NOIR](http
   - Compare the value with 1_000_000
 
 - The circuit output the hash of account public key, to be used in the verifier contract to prevent double spendings
+
+- The circuit is tested and proof is generated with Noir version [f3800c52c81a27d3b52cfe23f45e764234b1c268](https://github.com/noir-lang/noir/commit/f3800c52c81a27d3b52cfe23f45e764234b1c268)
 
 ## ERC20 contracts and storage layout
 
