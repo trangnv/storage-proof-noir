@@ -13,10 +13,10 @@ User can prove that he owns an address which has more than 1_000_000 [NOIR](http
 
   - [x] Signing message with private key, get data from Alchemy API and process it to be used as input for Noir circuits: `ts/utils/populateInput.ts`
 
-  - [x] Generate proof with Noir circuits: `circuits/whale`
+  - [x] Generate proof with Noir circuits: `circuits/whale` using Nargo CLI
 
-  - [] Generating proof with TypeScript / on browser: <br>
-    Currently, the circuit here exceeds the limit that [bb.js](https://www.npmjs.com/package/@aztec/bb.js) can handle, recursion is planned to be implemented that will enable us to generate the proof with TypeScript and run it on browser
+  - [ ] Generating proof with TypeScript / on browser: <br>
+        Currently, the circuit here exceeds the limit that [bb.js](https://www.npmjs.com/package/@aztec/bb.js) can handle, recursion is planned to be implemented that will enable us to generate the proof with TypeScript and run it on browser
   - [x] Verifier contract: `verifier-contract/src/WhaleVerifier.sol` <br>
         Tested with Foundry with input / proof generated from Nargo CLI
 
