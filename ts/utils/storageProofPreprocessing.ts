@@ -26,15 +26,12 @@ export async function preprocessing(
   storage_slot: Array<String>,
   block: String
 ) {
-  // ): Promise<Serial> {
-  // Optional config object, but defaults to demo api-key and eth-mainnet.
   const settings = {
     apiKey: ALCHEMY_API_KEY,
     network: Network.ETH_SEPOLIA,
   };
   const alchemy = new Alchemy(settings);
 
-  // Data to get the first owner of cryptopunk #1
   const res = await alchemy.core.send("eth_getProof", [
     contract_address,
     storage_slot,

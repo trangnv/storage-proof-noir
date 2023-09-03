@@ -9,6 +9,17 @@ User can prove that he owns an address which has more than 1_000_000 [NOIR](http
 - run the Noir circuit to generate the proof
 - send the proof to the verifier contract using a anonymous account
 
+- Current status:
+
+  - [x] Signing message with private key, get data from Alchemy API and process it to be used as input for Noir circuits: `ts/utils/populateInput.ts`
+
+  - [x] Generate proof with Noir circuits: `circuits/whale`
+
+  - [] Generating proof with TypeScript / on browser: <br>
+    Currently, the circuit here exceeds the limit that [bb.js](https://www.npmjs.com/package/@aztec/bb.js) can handle, recursion is planned to be implemented that will enable us to generate the proof with TypeScript and run it on browser
+  - [x] Verifier contract: `verifier-contract/src/WhaleVerifier.sol` <br>
+        Tested with Foundry with input / proof generated from Nargo CLI
+
 ## Repo structure
 
 ```bash
@@ -74,13 +85,13 @@ $ cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f
 
 - TypeScript utilities are also available in `ts/utils`
 
-## ts - testing noir circuits and Ethereum API endpoints utils
+## ts - Testing noir circuits and Ethereum API endpoints utils
 
 - Utility to sign message with private key, get data from Alchemy API and process it to be used as input for Noir circuits
 
 - Testing Noir circuits with TypeScript _(in progress)_
 
-- Proving on browser
+- Proving on browser _(in progress)_
 
 ## Verifier contract `./verifier-contract`
 
