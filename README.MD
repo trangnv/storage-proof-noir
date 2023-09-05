@@ -113,3 +113,4 @@ $ cast storage 0x0041ff33E47eAE38ab8B9A1C2070E279d5AAf211 0x198faee1dd5108d4ea2f
 
 - [noir-storage-proofs-demo](https://github.com/Maddiaa0/noir-storage-proofs-demo)
 - [noir-trie-proofs](https://github.com/aragonzkresearch/noir-trie-proofs)
+- [ZKCamp/stealthdrop-assignment](https://github.com/ZKCamp/stealthdrop-assignment)
